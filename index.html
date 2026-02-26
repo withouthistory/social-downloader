@@ -60,7 +60,7 @@
 
             try {
                 // This points exactly to your MacBook's running server!
-                const response = await fetch('http://127.0.0.1:8000/api/extract', {
+                const response = await fetch('/api/extract', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: urlInput })
