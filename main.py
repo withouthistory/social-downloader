@@ -41,6 +41,11 @@ async def extract_video_link(request: VideoRequest, req: Request):
         'outtmpl': out_template,
         'quiet': True,
         'noplaylist': True, # Ensures it only grabs a single video
+	# --- Security & Resource Limits ---
+        'max_filesize': 150 * 1024 * 1024, # Hard stop at 150MB to protect server RAM/Disk
+        'format': 'best',  # Tells the engine to only look for formats under 150MB
+	'no_color': True,
+
     }
     
     try:
