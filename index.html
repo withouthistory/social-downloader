@@ -3,88 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Downloader</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <title>WithoutHustle | Premium Media Extractor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --accent: #c084fc;
+            --banner-bg: linear-gradient(90deg, #f59e0b, #ea580c);
+        }
 
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full">
-        <h1 class="text-2xl font-bold text-center text-gray-800 mb-2">Media Downloader</h1>
-        <p class="text-center text-gray-500 mb-6 text-sm">Paste a link from YouTube, X (Twitter), or Instagram</p>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #0f172a, #1e293b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            padding-top: 80px;
+        }
 
-        <form id="downloadForm" class="space-y-4">
-            <div>
-                <input type="url" id="videoUrl" required
-                    placeholder="e.g., https://youtube.com/watch?v=..." 
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-            </div>
-            
-            <button type="submit" id="submitBtn" 
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200">
-                Get Download Link
-            </button>
-        </form>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-        <div id="loading" class="hidden mt-6 text-center">
-            <p class="text-blue-600 font-medium animate-pulse">Extracting video... this might take a few seconds.</p>
-        </div>
-
-        <div id="resultArea" class="hidden mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 id="videoTitle" class="font-semibold text-gray-800 mb-3 truncate text-sm">Video Title</h3>
-            <a id="downloadLink" href="#" target="_blank" 
-                class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition">
-                Download .MP4
-            </a>
-        </div>
+        /* High-Contrast Campaign Banner */
+        .campaign-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--banner-bg);
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-sizing: border-box;
+            z-index: 100;
+            color: white;
+            font-weight: 600;
+        }
         
-        <div id="errorArea" class="hidden mt-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200 text-sm text-center">
+        .campaign-banner .support-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .campaign-banner a {
+            color: white;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: transform 0.2s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .campaign-banner a:hover { 
+            transform: scale(1.15); 
+            opacity: 0.9; 
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-container { margin-bottom: 1.5rem; }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.05em;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline { color: #94a3b8; margin-bottom: 2rem; font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.8rem; }
+
+        input {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* Progress Bar Styles */
+        .progress-wrapper {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .progress-status {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            border-radius: 10px;
+            transition: width 0.4s ease-out;
+            box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+        }
+
+        #result { margin-top: 2rem; display: none; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .video-card { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 1.2rem; }
+        .video-card img { width: 100%; border-radius: 14px; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1); }
+
+        .download-btn {
+            display: block;
+            background: #10b981;
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover { background: #059669; }
+
+        footer { text-align: center; padding: 1rem; width: 100%; max-width: 500px; }
+
+        .follow-label { font-size: 0.85rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+        
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.4rem; transition: all 0.3s ease; text-decoration: none; }
+        .social-links a:hover { color: var(--accent); transform: scale(1.2); }
+
+        .brand-text { font-size: 0.9rem; color: #64748b; font-weight: 400; }
+        .brand-text b { color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="campaign-banner">
+    <span>Support WithoutHustle</span>
+    <div class="support-links">
+        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" title="Support on Patreon"><i class="fab fa-patreon"></i></a>
+        <a href="https://buymeacoffee.com/WithoutHistory" target="_blank" title="Buy me a coffee"><i class="fas fa-coffee"></i></a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="logo-container">
+        <svg width="56" height="56" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="14" fill="url(#paint0_linear)"/>
+            <path d="M12 18L18 30L24 20L30 30L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+                <linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#6366f1"/>
+                    <stop offset="1" stop-color="#c084fc"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <h1>WithoutHustle</h1>
+    <p class="tagline">By Without History</p>
+    
+    <input type="text" id="videoUrl" placeholder="Paste X, TikTok, IG, or Facebook link...">
+    <button id="extractBtn" onclick="extractVideo()">Get media</button>
+    
+    <div class="progress-wrapper" id="progressWrapper">
+        <div class="progress-status">
+            <span id="progressText">Connecting to media server...</span>
+            <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
     </div>
 
-    <script>
-        document.getElementById('downloadForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevents the page from refreshing
-            
-            const urlInput = document.getElementById('videoUrl').value;
-            const submitBtn = document.getElementById('submitBtn');
-            const loading = document.getElementById('loading');
-            const resultArea = document.getElementById('resultArea');
-            const errorArea = document.getElementById('errorArea');
-            
-            // Reset UI states
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-50');
-            loading.classList.remove('hidden');
-            resultArea.classList.add('hidden');
-            errorArea.classList.add('hidden');
+    <div id="result">
+        <div class="video-card">
+            <img id="thumbnail" src="" alt="Thumbnail">
+            <h3 id="videoTitle" style="font-size: 1rem; margin-bottom: 1.2rem; font-weight: 400;"></h3>
+            <a id="downloadLink" href="#" class="download-btn">Download Video</a>
+        </div>
+    </div>
+</div>
 
-            try {
-                // This points exactly to your MacBook's running server!
-                const response = await fetch('/api/extract', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: urlInput })
-                });
+<footer>
+    <div class="follow-label">Follow Us</div>
+    <div class="social-links">
+        <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://x.com/WithoutHistory" target="_blank" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+    </div>
+    <div class="brand-text">A <b>Without History</b> Production</div>
+</footer>
 
-                const data = await response.json();
+<script>
+    let simInterval;
 
-                if (response.ok && data.success) {
-                    document.getElementById('videoTitle').textContent = data.title;
-                    document.getElementById('downloadLink').href = data.download_url;
-                    resultArea.classList.remove('hidden');
-                } else {
-                    throw new Error(data.detail || 'Failed to extract video');
-                }
-            } catch (error) {
-                errorArea.textContent = "Error: " + error.message;
-                errorArea.classList.remove('hidden');
-            } finally {
-                // Restore button state
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-50');
-                loading.classList.add('hidden');
+    function startSimulatedProgress() {
+        const wrapper = document.getElementById('progressWrapper');
+        const bar = document.getElementById('progressBar');
+        const text = document.getElementById('progressText');
+        const pct = document.getElementById('progressPercent');
+        
+        wrapper.style.display = 'block';
+        bar.style.width = '0%';
+        pct.innerText = '0%';
+        text.innerText = 'Extracting media...';
+        
+        let width = 0;
+        
+        // Simulates the progress jumping up, then slowing down as it approaches 90%
+        simInterval = setInterval(() => {
+            if (width < 90) {
+                // Random increments to feel authentic
+                let increment = Math.random() * (90 - width) * 0.1; 
+                width += increment > 0.5 ? increment : 0.5;
+                
+                if (width > 90) width = 90;
+                
+                bar.style.width = width + '%';
+                pct.innerText = Math.floor(width) + '%';
+                
+                if (width > 50) text.innerText = 'Processing metadata...';
+                if (width > 80) text.innerText = 'Finalizing file...';
             }
-        });
-    </script>
+        }, 400);
+    }
+
+    function completeProgress() {
+        clearInterval(simInterval);
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('progressPercent').innerText = '100%';
+        document.getElementById('progressText').innerText = 'Ready!';
+    }
+
+    async function extractVideo() {
+        const urlInput = document.getElementById('videoUrl');
+        const btn = document.getElementById('extractBtn');
+        const wrapper = document.getElementById('progressWrapper');
+        const result = document.getElementById('result');
+        
+        if (!urlInput.value) return;
+
+        btn.disabled = true;
+        result.style.display = 'none';
+        
+        startSimulatedProgress();
+
+        try {
+            const response = await fetch('/api/extract', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlInput.value })
+            });
+
+            const data = await response.json();
+            
+            completeProgress();
+
+            // Give the bar half a second to show 100% before revealing the video
+            setTimeout(() => {
+                wrapper.style.display = 'none';
+                
+                if (data.success) {
+                    document.getElementById('videoTitle').innerText = data.title;
+                    document.getElementById('thumbnail').src = data.thumbnail;
+                    document.getElementById('downloadLink').href = data.download_url;
+                    result.style.display = 'block';
+                } else {
+                    alert('Engine Error: ' + data.detail);
+                }
+                btn.disabled = false;
+            }, 600);
+
+        } catch (err) {
+            clearInterval(simInterval);
+            wrapper.style.display = 'none';
+            alert('Connection Error: ' + err.message);
+            btn.disabled = false;
+        }
+    }
+</script>
+
 </body>
 </html>
