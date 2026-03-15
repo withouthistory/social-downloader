@@ -17,7 +17,7 @@
     <title>WithoutHustle | Premium Media Extractor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
 
         :root {
@@ -225,6 +225,20 @@
         .brand-text b { color: #94a3b8; }
 
 
+	.supported-platforms {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        .supported-platforms i {
+            margin-right: 4px;
+            color: var(--accent); /* Uses your purple theme color */
+        }
+
 
 
 	/* Push Monetag In-Page Push to the bottom */
@@ -276,7 +290,15 @@
 
     <h1>WithoutHustle</h1>
     <p class="tagline">By Without History</p>
-    
+    <div class="supported-platforms"> Paste Your Link Below 
+       <span><i class="fa-brands fa-x-twitter"></i> X</span>
+       <span><i class="fa-brands fa-tiktok"></i> TikTok</span>
+       <span><i class="fa-brands fa-instagram"></i> IG</span>
+       <span><i class="fa-brands fa-facebook"></i> FB</span>
+       <span><i class="fa-brands fa-youtube"></i> YT</span>
+    </div>    
+
+
     <input type="text" id="videoUrl" placeholder="Paste X, TikTok, IG, or Facebook link...">
     <button id="extractBtn" onclick="extractVideo()">Get media</button>
 
@@ -318,7 +340,7 @@
     <div class="follow-label">Follow Us</div>
     <div class="social-links">
         <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-	<a href="https://x.com/your-profile" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
+	<a href="https://x.com/WithoutHistory" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
     </div>
     <div class="brand-text">A <b>Without History</b> Production</div>
 </footer>
