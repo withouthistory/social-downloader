@@ -4,10 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import yt_dlp
 import os
-import uuid
 import glob
 import requests
-import time 
+import time
+import string
+import random
 
 app = FastAPI(title="Social Media Downloader API")
 
@@ -26,17 +27,23 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(BASE_DIR, "downloads")
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+def generate_short_id():
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
 def cleanup_file(filepath: str):
+    # Wait 5 minutes before deleting so the user actually has time to finish the download
+    time.sleep(300) 
     if os.path.exists(filepath):
         os.remove(filepath)
 
 @app.post("/api/extract")
-async def extract_video_link(request: VideoRequest, req: Request):
-    file_id = str(uuid.uuid4())
+async def extract_video_link(request: VideoRequest, background_tasks: BackgroundTasks):
+    # Create the branded filename prefix and short ID
+    short_id = generate_short_id()
     domain = request.url.lower()
-
+    
     # ==========================================
-    # ROUTE 1: INSTAGRAM (Proxy Tunnel 1)
+    # ROUTE 1: INSTAGRAM (Proxy Tunnel)
     # ==========================================
     if "instagram.com" in domain:
         try:
@@ -45,44 +52,26 @@ async def extract_video_link(request: VideoRequest, req: Request):
                 "x-rapidapi-host": "social-download-all-in-one.p.rapidapi.com",
                 "x-rapidapi-key": "6cc2ad1a0fmsh6bbce3f718432fap169013jsn88c1fddd2f7d"
             }
-            payload = {"url": request.url}
-            api_response = requests.post("https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink", json=payload, headers=headers)
+            api_response = requests.post("https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink", 
+                                        json={"url": request.url}, headers=headers)
             
-            # Catch API Limits for Instagram
             if api_response.status_code == 429:
-                raise HTTPException(status_code=429, detail="The Instagram request limit has been reached today. Please try again tomorrow.")
+                raise HTTPException(status_code=429, detail="Instagram limit reached. Try again tomorrow.")
                 
             data = api_response.json()
-
-            if data.get("error"):
-                raise Exception(data.get("message", "API returned an error"))
-
             medias = data.get("medias", [])
-            target_url = None
-
-            for m in medias:
-                if m.get("type") == "video" and m.get("is_audio") is True and m.get("extension") == "mp4":
-                    target_url = m.get("url")
-                    break
+            target_url = next((m.get("url") for m in medias if m.get("extension") == "mp4"), None)
 
             if not target_url:
-                for m in medias:
-                    if m.get("type") == "video" and m.get("extension") == "mp4":
-                        target_url = m.get("url")
-                        break
+                raise Exception("Could not find a valid video stream.")
 
-            if not target_url:
-                raise Exception("Proxy could not find a valid MP4 stream.")
-
-            filename = f"{file_id}.mp4"
+            filename = f"withouthustle.net-{short_id}.mp4"
             filepath = os.path.join(DOWNLOAD_DIR, filename)
             
-            vid_resp = requests.get(target_url, stream=True)
-            vid_resp.raise_for_status()
-            
-            with open(filepath, 'wb') as f:
-                for chunk in vid_resp.iter_content(chunk_size=8192):
-                    if chunk:
+            # Download the file to our server
+            with requests.get(target_url, stream=True) as r:
+                with open(filepath, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
                         f.write(chunk)
 
             return {
@@ -91,13 +80,11 @@ async def extract_video_link(request: VideoRequest, req: Request):
                 "download_url": f"/api/download/{filename}",
                 "thumbnail": data.get("thumbnail")
             }
-        except HTTPException as http_exc:
-            raise http_exc
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Instagram Tunnel Error: {str(e)}")
+            raise HTTPException(status_code=400, detail=str(e))
 
     # ==========================================
-    # ROUTE 2: YOUTUBE (Asynchronous Proxy Tunnel 2)
+    # ROUTE 2: YOUTUBE (Async Proxy)
     # ==========================================
     elif "youtube.com" in domain or "youtu.be" in domain:
         try:
@@ -105,96 +92,61 @@ async def extract_video_link(request: VideoRequest, req: Request):
                 "x-rapidapi-host": "youtube-info-download-api.p.rapidapi.com",
                 "x-rapidapi-key": "6cc2ad1a0fmsh6bbce3f718432fap169013jsn88c1fddd2f7d"
             }
-            params = {
-                "format": "720", 
-                "add_info": "1",
-                "url": request.url
-            }
-            
-            init_resp = requests.get("https://youtube-info-download-api.p.rapidapi.com/ajax/download.php", headers=headers, params=params)
-            
-            # Catch API Limits for YouTube
-            if init_resp.status_code == 429:
-                raise HTTPException(status_code=429, detail="The YouTube request limit has been reached today. Please try again tomorrow.")
-                
+            init_resp = requests.get("https://youtube-info-download-api.p.rapidapi.com/ajax/download.php", 
+                                     headers=headers, params={"format": "720", "url": request.url})
             init_data = init_resp.json()
             
-            if not init_data.get("success"):
-                error_msg = init_data.get("message", "YouTube Proxy failed to initialize.")
-                # Fallback check in case the API passes the limit in the payload instead of the header
-                if "quota" in error_msg.lower() or "limit" in error_msg.lower():
-                    raise HTTPException(status_code=429, detail="The YouTube request limit has been reached today. Please try again tomorrow.")
-                raise Exception(error_msg)
-                
+            # Polling for the finished file
             progress_url = init_data.get("progress_url")
-            vid_title = init_data.get("info", {}).get("title", "YouTube Video")
-            vid_thumb = init_data.get("info", {}).get("image", "")
-            
             target_url = None
-            for _ in range(45): 
-                time.sleep(2) 
-                prog_resp = requests.get(progress_url)
-                prog_data = prog_resp.json()
-                
-                if prog_data.get("text") == "Finished" and prog_data.get("download_url"):
+            for _ in range(30):
+                time.sleep(2)
+                prog_data = requests.get(progress_url).json()
+                if prog_data.get("text") == "Finished":
                     target_url = prog_data.get("download_url")
                     break
-                elif prog_data.get("text") == "Error":
-                    raise Exception("Proxy encountered an error while processing the video.")
             
-            if not target_url:
-                raise Exception("YouTube proxy timed out.")
+            if not target_url: raise Exception("YouTube Proxy Timeout")
 
-            filename = f"{file_id}.mp4"
+            filename = f"withouthustle.net-{short_id}.mp4"
             filepath = os.path.join(DOWNLOAD_DIR, filename)
             
-            final_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-            vid_resp = requests.get(target_url, headers=final_headers, stream=True)
-            vid_resp.raise_for_status()
-            
-            with open(filepath, 'wb') as f:
-                for chunk in vid_resp.iter_content(chunk_size=8192):
-                    if chunk:
+            with requests.get(target_url, stream=True) as r:
+                with open(filepath, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
                         f.write(chunk)
 
             return {
                 "success": True,
-                "title": vid_title,
+                "title": init_data.get("info", {}).get("title", "YouTube Video"),
                 "download_url": f"/api/download/{filename}",
-                "thumbnail": vid_thumb
+                "thumbnail": init_data.get("info", {}).get("image")
             }
-            
-        except HTTPException as http_exc:
-            raise http_exc # Respects our custom 429 message without wrapping it
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"YouTube Tunnel Error: {str(e)}")
+            raise HTTPException(status_code=400, detail=str(e))
 
     # ==========================================
-    # ROUTE 3: LOCAL ENGINE (X, TikTok, Facebook)
+    # ROUTE 3: LOCAL ENGINE (X, TikTok, FB)
     # ==========================================
     else:
-        out_template = os.path.join(DOWNLOAD_DIR, f'{file_id}.%(ext)s')
+        # This uses our Short ID and Prefix
+        out_template = os.path.join(DOWNLOAD_DIR, f'withouthustle.net-{short_id}.%(ext)s')
         
         ydl_opts = {
             'format': 'best',
             'outtmpl': out_template,
             'quiet': True,
             'noplaylist': True, 
-            'max_filesize': 150 * 1024 * 1024, 
-            'no_color': True,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            }
         }
         
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(request.url, download=True)
-                
-                search_pattern = os.path.join(DOWNLOAD_DIR, f'{file_id}.*')
-                downloaded_files = glob.glob(search_pattern)
-                
-                if not downloaded_files:
-                    raise Exception("Download failed on the server. File not found.")
-                    
-                actual_filepath = downloaded_files[0]
+                search_pattern = os.path.join(DOWNLOAD_DIR, f'withouthustle.net-{short_id}.*')
+                actual_filepath = glob.glob(search_pattern)[0]
                 filename_only = os.path.basename(actual_filepath)
                 
                 return {
@@ -206,14 +158,14 @@ async def extract_video_link(request: VideoRequest, req: Request):
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))
 
-
 @app.get("/api/download/{filename}")
 async def download_file(filename: str, background_tasks: BackgroundTasks):
     filepath = os.path.join(DOWNLOAD_DIR, filename)
     
     if not os.path.exists(filepath):
-        raise HTTPException(status_code=404, detail="File not found or expired.")
+        raise HTTPException(status_code=404, detail="File expired. Please try again.")
         
+    # Queue the file for deletion AFTER the user starts the download
     background_tasks.add_task(cleanup_file, filepath)
     
     return FileResponse(
