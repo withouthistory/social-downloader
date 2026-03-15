@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3F2BZBPEFG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3F2BZBPEFG');
+
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WithoutHustle | Premium Media Extractor</title>
@@ -8,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
         :root {
             --primary: #6366f1;
             --primary-hover: #4f46e5;
@@ -211,7 +223,25 @@
 
         .brand-text { font-size: 0.9rem; color: #64748b; font-weight: 400; }
         .brand-text b { color: #94a3b8; }
+
+
+
+
+	/* Push Monetag In-Page Push to the bottom */
+        #p-container, .p-wrapper {
+            top: auto !important;
+            bottom: 20px !important;
+        }
+
     </style>
+
+
+<script>(function(s){s.dataset.zone='10671474',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+
+
+
+
 </head>
 
 
@@ -249,6 +279,21 @@
     
     <input type="text" id="videoUrl" placeholder="Paste X, TikTok, IG, or Facebook link...">
     <button id="extractBtn" onclick="extractVideo()">Get media</button>
+
+
+<div id="donation-links" style="display: none; margin-top: 15px; text-align: center;">
+    <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Support Without History:</p>
+    <div style="display: flex; gap: 15px; justify-content: center;">
+        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
+            <i class="fab fa-patreon" style="color: #ff424d;"></i> Patreon
+        </a>
+        <a href="https://buymeacoffee.com/withouthistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
+            <i class="fas fa-coffee" style="color: #ffdd00;"></i> Buy Me a Coffee
+        </a>
+    </div>
+</div>
+
+
     
     <div class="progress-wrapper" id="progressWrapper">
         <div class="progress-status">
@@ -273,7 +318,7 @@
     <div class="follow-label">Follow Us</div>
     <div class="social-links">
         <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="https://x.com/WithoutHistory" target="_blank" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+	<a href="https://x.com/your-profile" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
     </div>
     <div class="brand-text">A <b>Without History</b> Production</div>
 </footer>
@@ -352,6 +397,10 @@
                     document.getElementById('thumbnail').src = data.thumbnail;
                     document.getElementById('downloadLink').href = data.download_url;
                     result.style.display = 'block';
+
+		    // THE INJECTION: Unhide the donation links
+                    document.getElementById('donation-links').style.display = 'block';
+
                 } else {
                     alert('Engine Error: ' + data.detail);
                 }
