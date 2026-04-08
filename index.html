@@ -1,38 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3F2BZBPEFG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-3F2BZBPEFG');
-
 </script>
+
     <link rel="icon" href="data:image/svg+xml,<svg width='32' height='32' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='48' height='48' rx='14' fill='%236366f1'/><path d='M12 18L18 30L24 20L30 30L36 18' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WithoutHustle">
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+      }
+    </script>
 
-	<link rel="manifest" href="/manifest.json">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name="apple-mobile-web-app-title" content="WithoutHustle">
-	
-	<script>
-	  if ('serviceWorker' in navigator) {
-	    navigator.serviceWorker.register('/sw.js');
-	  }
-	</script>
-
-	
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WithoutHustle | Premium Media Extractor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-
         :root {
             --primary: #6366f1;
             --primary-hover: #4f46e5;
@@ -65,7 +61,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* High-Contrast Campaign Banner */
         .campaign-banner {
             position: absolute;
             top: 0;
@@ -153,6 +148,37 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
         }
 
+        /* Format Selector Styles */
+        .format-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 5px;
+            border-radius: 12px;
+        }
+
+        .format-option {
+            flex: 1;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #94a3b8;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .format-option.active {
+            background: var(--primary);
+            color: white;
+        }
+
         button {
             width: 100%;
             padding: 1.2rem;
@@ -174,7 +200,6 @@
 
         button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Progress Bar Styles */
         .progress-wrapper {
             display: none;
             margin-top: 1.5rem;
@@ -227,18 +252,14 @@
         .download-btn:hover { background: #059669; }
 
         footer { text-align: center; padding: 1rem; width: 100%; max-width: 500px; }
-
         .follow-label { font-size: 0.85rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-        
         .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
         .social-links a { color: #94a3b8; font-size: 1.4rem; transition: all 0.3s ease; text-decoration: none; }
         .social-links a:hover { color: var(--accent); transform: scale(1.2); }
-
         .brand-text { font-size: 0.9rem; color: #64748b; font-weight: 400; }
         .brand-text b { color: #94a3b8; }
 
-
-	.supported-platforms {
+        .supported-platforms {
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -249,33 +270,17 @@
         }
         .supported-platforms i {
             margin-right: 4px;
-            color: var(--accent); /* Uses your purple theme color */
+            color: var(--accent);
         }
 
-
-
-	/* Push Monetag In-Page Push to the bottom */
         #p-container, .p-wrapper {
             top: auto !important;
             bottom: 20px !important;
         }
-
     </style>
 
-
-<script>(function(s){s.dataset.zone='10671474',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
-
-
-
-
+    <script>(function(s){s.dataset.zone='10671474',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
-
-
-
-
-
-
 
 <body>
 
@@ -303,6 +308,7 @@
 
     <h1>WithoutHustle</h1>
     <p class="tagline">By Without History</p>
+    
     <div class="supported-platforms"> Paste Your Link Below 
        <span><i class="fa-brands fa-x-twitter"></i> X</span>
        <span><i class="fa-brands fa-tiktok"></i> TikTok</span>
@@ -311,25 +317,31 @@
        <span><i class="fa-brands fa-youtube"></i> YT</span>
     </div>    
 
+    <input type="text" id="videoUrl" placeholder="Paste link here...">
 
-    <input type="text" id="videoUrl" placeholder="Paste X, TikTok, IG, or Facebook link...">
+    <div class="format-selector" id="formatSelector">
+        <div class="format-option active" data-value="mp4" onclick="setFormat('mp4')">
+            <i class="fas fa-video"></i> Video
+        </div>
+        <div class="format-option" data-value="mp3" onclick="setFormat('mp3')">
+            <i class="fas fa-music"></i> Audio (MP3)
+        </div>
+    </div>
+
     <button id="extractBtn" onclick="extractVideo()">Get media</button>
 
-
-<div id="donation-links" style="display: none; margin-top: 15px; text-align: center;">
-    <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Support Without History:</p>
-    <div style="display: flex; gap: 15px; justify-content: center;">
-        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
-            <i class="fab fa-patreon" style="color: #ff424d;"></i> Patreon
-        </a>
-        <a href="https://buymeacoffee.com/withouthistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
-            <i class="fas fa-coffee" style="color: #ffdd00;"></i> Buy Me a Coffee
-        </a>
+    <div id="donation-links" style="display: none; margin-top: 15px; text-align: center;">
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Support Without History:</p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
+                <i class="fab fa-patreon" style="color: #ff424d;"></i> Patreon
+            </a>
+            <a href="https://buymeacoffee.com/withouthistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
+                <i class="fas fa-coffee" style="color: #ffdd00;"></i> Buy Me a Coffee
+            </a>
+        </div>
     </div>
-</div>
 
-
-    
     <div class="progress-wrapper" id="progressWrapper">
         <div class="progress-status">
             <span id="progressText">Connecting to media server...</span>
@@ -344,7 +356,7 @@
         <div class="video-card">
             <img id="thumbnail" src="" alt="Thumbnail">
             <h3 id="videoTitle" style="font-size: 1rem; margin-bottom: 1.2rem; font-weight: 400;"></h3>
-            <a id="downloadLink" href="#" class="download-btn">Download Video</a>
+            <a id="downloadLink" href="#" class="download-btn">Download Media</a>
         </div>
     </div>
 </div>
@@ -353,13 +365,21 @@
     <div class="follow-label">Follow Us</div>
     <div class="social-links">
         <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-	<a href="https://x.com/WithoutHistory" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
+        <a href="https://x.com/WithoutHistory" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
     </div>
-    <div class="brand-text">A <b>Without History</b> Production</div>
+    <div class="brand-text">A <b>Without History</b> Production <br><span style="font-size: 0.7rem; opacity: 0.5;">v1.1.0</span></div>
 </footer>
 
 <script>
     let simInterval;
+    let selectedFormat = 'mp4';
+
+    function setFormat(val) {
+        selectedFormat = val;
+        document.querySelectorAll('.format-option').forEach(opt => {
+            opt.classList.toggle('active', opt.dataset.value === val);
+        });
+    }
 
     function startSimulatedProgress() {
         const wrapper = document.getElementById('progressWrapper');
@@ -373,19 +393,13 @@
         text.innerText = 'Extracting media...';
         
         let width = 0;
-        
-        // Simulates the progress jumping up, then slowing down as it approaches 90%
         simInterval = setInterval(() => {
             if (width < 90) {
-                // Random increments to feel authentic
                 let increment = Math.random() * (90 - width) * 0.1; 
                 width += increment > 0.5 ? increment : 0.5;
-                
                 if (width > 90) width = 90;
-                
                 bar.style.width = width + '%';
                 pct.innerText = Math.floor(width) + '%';
-                
                 if (width > 50) text.innerText = 'Processing metadata...';
                 if (width > 80) text.innerText = 'Finalizing file...';
             }
@@ -409,35 +423,36 @@
 
         btn.disabled = true;
         result.style.display = 'none';
-        
         startSimulatedProgress();
 
         try {
             const response = await fetch('/api/extract', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: urlInput.value })
+                body: JSON.stringify({ 
+                    url: urlInput.value,
+                    format: selectedFormat 
+                })
             });
 
             const data = await response.json();
-            
             completeProgress();
 
-            // Give the bar half a second to show 100% before revealing the video
             setTimeout(() => {
                 wrapper.style.display = 'none';
-                
                 if (data.success) {
                     document.getElementById('videoTitle').innerText = data.title;
                     document.getElementById('thumbnail').src = data.thumbnail;
                     document.getElementById('downloadLink').href = data.download_url;
+                    
+                    // Update button text based on format
+                    const dlBtn = document.getElementById('downloadLink');
+                    dlBtn.innerText = selectedFormat === 'mp3' ? 'Download MP3' : 'Download Video';
+                    
                     result.style.display = 'block';
-
-		    // THE INJECTION: Unhide the donation links
                     document.getElementById('donation-links').style.display = 'block';
-
                 } else {
-                    alert('Engine Error: ' + data.detail);
+                    alert('Engine Error: ' + (data.detail || 'Unknown error'));
                 }
                 btn.disabled = false;
             }, 600);
@@ -457,7 +472,6 @@
         zoneId: 'ygx4ipeqqu',
     });
 </script>
-
 
 </body>
 </html>
