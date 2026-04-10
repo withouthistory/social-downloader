@@ -80,6 +80,11 @@
             color: white;
             font-weight: 600;
         }
+
+        @media (max-width: 600px) {
+            .campaign-banner { display: none !important; }
+            body { padding-top: 40px; }
+        }
         
         .campaign-banner .support-links {
             display: flex;
@@ -148,7 +153,6 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
         }
 
-        /* Format Selector Styles */
         .format-selector {
             display: flex;
             justify-content: center;
@@ -200,6 +204,19 @@
 
         button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
+        .quick-support {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .quick-support .support-text { font-size: 0.85rem; color: #94a3b8; }
+        .quick-support a { font-size: 1.3rem; transition: transform 0.2s; text-decoration: none; display: flex; align-items: center; }
+        .quick-support a:hover { transform: scale(1.2); filter: brightness(1.2); }
+
         .progress-wrapper {
             display: none;
             margin-top: 1.5rem;
@@ -246,7 +263,9 @@
             color: white;
             text-decoration: none;
             font-weight: 700;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: center;
         }
 
         .download-btn:hover { background: #059669; }
@@ -287,6 +306,9 @@
 <div class="campaign-banner">
     <span>Support WithoutHustle</span>
     <div class="support-links">
+        <a href="https://ko-fi.com/withouthistory" target="_blank" title="Support on Ko-fi">
+            <img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" alt="Ko-fi" style="width: 22px; height: 22px; vertical-align: middle;">
+        </a>
         <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" title="Support on Patreon"><i class="fab fa-patreon"></i></a>
         <a href="https://buymeacoffee.com/WithoutHistory" target="_blank" title="Buy me a coffee"><i class="fas fa-coffee"></i></a>
     </div>
@@ -330,16 +352,17 @@
 
     <button id="extractBtn" onclick="extractVideo()">Get media</button>
 
-    <div id="donation-links" style="display: none; margin-top: 15px; text-align: center;">
-        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Support Without History:</p>
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
-                <i class="fab fa-patreon" style="color: #ff424d;"></i> Patreon
-            </a>
-            <a href="https://buymeacoffee.com/withouthistory" target="_blank" style="color: #f8fafc; text-decoration: none; font-size: 0.9rem;">
-                <i class="fas fa-coffee" style="color: #ffdd00;"></i> Buy Me a Coffee
-            </a>
-        </div>
+    <div class="quick-support">
+        <span class="support-text">Support this free tool:</span>
+        <a href="https://ko-fi.com/withouthistory" target="_blank" title="Support on Ko-fi">
+            <img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" alt="Ko-fi" style="width: 24px; height: 24px;">
+        </a>
+        <a href="https://buymeacoffee.com/withouthistory" target="_blank" title="Buy Me a Coffee">
+            <i class="fas fa-coffee" style="color: #ffdd00;"></i>
+        </a>
+        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" title="Patreon">
+            <i class="fab fa-patreon" style="color: #ff424d;"></i>
+        </a>
     </div>
 
     <div class="progress-wrapper" id="progressWrapper">
@@ -367,7 +390,7 @@
         <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="https://x.com/WithoutHistory" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
     </div>
-    <div class="brand-text">A <b>Without History</b> Production <br><span style="font-size: 0.7rem; opacity: 0.5;">v1.1.0</span></div>
+    <div class="brand-text">A <b>Without History</b> Production <br><span style="font-size: 0.7rem; opacity: 0.5;">v1.1.3</span></div>
 </footer>
 
 <script>
@@ -413,6 +436,56 @@
         document.getElementById('progressText').innerText = 'Ready!';
     }
 
+    // NEW: Native Share Sheet function
+    async function downloadToCameraRoll(videoUrl, filename) {
+        const btn = document.getElementById('downloadLink');
+        const originalText = btn.innerText;
+        
+        try {
+            // Buffer UI state
+            btn.innerText = "Buffering file (Please wait)...";
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+
+            // Download file to browser RAM
+            const response = await fetch(videoUrl);
+            const blob = await response.blob();
+            const file = new File([blob], filename, { type: blob.type });
+
+            btn.innerText = "Opening Share Menu...";
+
+            // Trigger native share if supported (iOS Safari / Android Chrome)
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'WithoutHustle Media'
+                });
+            } else {
+                // Fallback: Standard browser download for PC / unsupported browsers
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            }
+            
+            // Restore UI
+            btn.innerText = originalText;
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+
+        } catch (error) {
+            console.error("Download action closed or failed:", error);
+            // Restore UI silently if user just cancelled the share sheet
+            btn.innerText = originalText;
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }
+    }
+
     async function extractVideo() {
         const urlInput = document.getElementById('videoUrl');
         const btn = document.getElementById('extractBtn');
@@ -443,14 +516,20 @@
                 if (data.success) {
                     document.getElementById('videoTitle').innerText = data.title;
                     document.getElementById('thumbnail').src = data.thumbnail;
-                    document.getElementById('downloadLink').href = data.download_url;
                     
-                    // Update button text based on format
                     const dlBtn = document.getElementById('downloadLink');
                     dlBtn.innerText = selectedFormat === 'mp3' ? 'Download MP3' : 'Download Video';
                     
+                    // Extract exact filename generated by backend to pass to the share sheet
+                    const finalFilename = data.download_url.split('/').pop();
+
+                    // Apply the new onclick behavior instead of direct href
+                    dlBtn.onclick = function(e) {
+                        e.preventDefault();
+                        downloadToCameraRoll(data.download_url, finalFilename);
+                    };
+                    
                     result.style.display = 'block';
-                    document.getElementById('donation-links').style.display = 'block';
                 } else {
                     alert('Engine Error: ' + (data.detail || 'Unknown error'));
                 }
