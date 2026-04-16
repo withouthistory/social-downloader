@@ -1,3 +1,4 @@
+cat << 'EOF' > /root/social-downloader/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,548 +10,196 @@
   gtag('config', 'G-3F2BZBPEFG');
 </script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg width='32' height='32' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='48' height='48' rx='14' fill='%236366f1'/><path d='M12 18L18 30L24 20L30 30L36 18' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="WithoutHustle">
-    
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js');
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<link rel="icon" href="data:image/svg+xml,<svg width='32' height='32' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='48' height='48' rx='14' fill='%236366f1'/><path d='M12 18L18 30L24 20L30 30L36 18' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WithoutHustle">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for(let registration of registrations) {
+        registration.unregister();
       }
-    </script>
+    });
+  }
+</script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WithoutHustle | Premium Media Extractor</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WithoutHustle | Premium Media Extractor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+    :root { --primary: #6366f1; --accent: #c084fc; --text: #f8fafc; }
+    body { font-family: 'Inter', sans-serif; background: #0f172a; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 20px; }
+    .container { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px); padding: 2.5rem; border-radius: 28px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+    .input-group { position: relative; width: 100%; margin-bottom: 1rem; }
+    input { width: 100%; padding: 1.2rem; padding-right: 3.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: white; box-sizing: border-box; font-size: 1rem; }
+    .paste-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: #c084fc; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+    .format-selector { display: flex; gap: 10px; margin-bottom: 1.5rem; background: rgba(15,23,42,0.4); padding: 5px; border-radius: 12px; }
+    .format-option { flex: 1; padding: 10px; cursor: pointer; border-radius: 8px; font-size: 0.85rem; color: #94a3b8; font-weight: 600; }
+    .format-option.active { background: var(--primary); color: white; }
+    .main-btn { width: 100%; padding: 1.2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 1.1rem; }
+    #result { margin-top: 2rem; display: none; }
+    .video-card { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 1.2rem; }
+    .video-card img { width: 100%; border-radius: 14px; margin-bottom: 10px; }
+    .download-btn { display: block; background: #10b981; padding: 1rem; border-radius: 12px; color: white; text-decoration: none; font-weight: 700; margin-top: 1rem; cursor: pointer; }
     
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
-            --accent: #c084fc;
-            --banner-bg: linear-gradient(90deg, #f59e0b, #ea580c);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #0f172a, #1e293b);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 20px;
-            padding-top: 80px;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .campaign-banner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--banner-bg);
-            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
-            padding: 12px 20px;
-            text-align: center;
-            font-size: 0.95rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            box-sizing: border-box;
-            z-index: 100;
-            color: white;
-            font-weight: 600;
-        }
-
-        @media (max-width: 600px) {
-            .campaign-banner { display: none !important; }
-            body { padding-top: 40px; }
-        }
-        
-        .campaign-banner .support-links {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .campaign-banner a {
-            color: white;
-            font-size: 1.3rem;
-            text-decoration: none;
-            transition: transform 0.2s, opacity 0.2s;
-            display: flex;
-            align-items: center;
-        }
-
-        .campaign-banner a:hover { 
-            transform: scale(1.15); 
-            opacity: 0.9; 
-        }
-
-        .container {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 3rem;
-            border-radius: 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo-container { margin-bottom: 1.5rem; }
-
-        h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.05em;
-            background: linear-gradient(to right, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .tagline { color: #94a3b8; margin-bottom: 2rem; font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.8rem; }
-
-        input {
-            width: 100%;
-            padding: 1.2rem;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: all 0.3s;
-            margin-bottom: 1rem;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(15, 23, 42, 0.8);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
-        }
-
-        .format-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            background: rgba(15, 23, 42, 0.4);
-            padding: 5px;
-            border-radius: 12px;
-        }
-
-        .format-option {
-            flex: 1;
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #94a3b8;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .format-option.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        button {
-            width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.4);
-            filter: brightness(1.1);
-        }
-
-        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .quick-support {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 1.2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .quick-support .support-text { font-size: 0.85rem; color: #94a3b8; }
-        .quick-support a { font-size: 1.3rem; transition: transform 0.2s; text-decoration: none; display: flex; align-items: center; }
-        .quick-support a:hover { transform: scale(1.2); filter: brightness(1.2); }
-
-        .progress-wrapper {
-            display: none;
-            margin-top: 1.5rem;
-            text-align: left;
-        }
-
-        .progress-status {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #818cf8, #c084fc);
-            border-radius: 10px;
-            transition: width 0.4s ease-out;
-            box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-        }
-
-        #result { margin-top: 2rem; display: none; animation: fadeIn 0.5s ease; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .video-card { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 1.2rem; }
-        .video-card img { width: 100%; border-radius: 14px; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1); }
-
-        .download-btn {
-            display: block;
-            background: #10b981;
-            padding: 1rem;
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .download-btn:hover { background: #059669; }
-
-        footer { text-align: center; padding: 1rem; width: 100%; max-width: 500px; }
-        .follow-label { font-size: 0.85rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-        .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.4rem; transition: all 0.3s ease; text-decoration: none; }
-        .social-links a:hover { color: var(--accent); transform: scale(1.2); }
-        .brand-text { font-size: 0.9rem; color: #64748b; font-weight: 400; }
-        .brand-text b { color: #94a3b8; }
-
-        .supported-platforms {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 500;
-        }
-        .supported-platforms i {
-            margin-right: 4px;
-            color: var(--accent);
-        }
-
-        #p-container, .p-wrapper {
-            top: auto !important;
-            bottom: 20px !important;
-        }
-    </style>
-
-    <script>(function(s){s.dataset.zone='10671474',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    .quick-support { display: flex; justify-content: center; gap: 15px; margin-top: 1.2rem; align-items: center;}
+    .quick-support span { font-size: 0.85rem; color: #94a3b8; }
+    .quick-support a { font-size: 1.3rem; transition: transform 0.2s; text-decoration: none; display: flex; align-items: center; }
+    .quick-support a:hover { transform: scale(1.2); }
+    
+    .campaign-banner { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(90deg, #f59e0b, #ea580c); padding: 12px 20px; text-align: center; display: flex; justify-content: center; gap: 20px; z-index: 100; color: white; font-weight: 600; }
+    .campaign-banner .support-links { display: flex; gap: 15px; align-items: center; }
+    .campaign-banner a { color: white; font-size: 1.3rem; text-decoration: none; }
+    @media (max-width: 600px) { .campaign-banner { display: none !important; } body { padding-top: 40px; } }
+    
+    footer { margin-top: 2rem; font-size: 0.7rem; opacity: 0.4; }
+</style>
 </head>
-
 <body>
 
 <div class="campaign-banner">
     <span>Support WithoutHustle</span>
     <div class="support-links">
-        <a href="https://ko-fi.com/withouthistory" target="_blank" title="Support on Ko-fi">
-            <img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" alt="Ko-fi" style="width: 22px; height: 22px; vertical-align: middle;">
-        </a>
-        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" title="Support on Patreon"><i class="fab fa-patreon"></i></a>
-        <a href="https://buymeacoffee.com/WithoutHistory" target="_blank" title="Buy me a coffee"><i class="fas fa-coffee"></i></a>
+        <a href="https://ko-fi.com/withouthistory" target="_blank"><img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" alt="Ko-fi" style="width: 22px; height: 22px; vertical-align: middle;"></a>
+        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank"><i class="fab fa-patreon"></i></a>
+        <a href="https://buymeacoffee.com/WithoutHistory" target="_blank"><i class="fas fa-coffee"></i></a>
     </div>
 </div>
 
 <div class="container">
-    <div class="logo-container">
-        <svg width="56" height="56" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="48" height="48" rx="14" fill="url(#paint0_linear)"/>
-            <path d="M12 18L18 30L24 20L30 30L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#6366f1"/>
-                    <stop offset="1" stop-color="#c084fc"/>
-                </linearGradient>
-            </defs>
-        </svg>
-    </div>
-
     <h1>WithoutHustle</h1>
-    <p class="tagline">By Without History</p>
+    <p style="color:#94a3b8; margin-bottom: 2rem; font-size: 0.8rem; text-transform: uppercase;">By Without History</p>
     
-    <div class="supported-platforms"> Paste Your Link Below 
-       <span><i class="fa-brands fa-x-twitter"></i> X</span>
-       <span><i class="fa-brands fa-tiktok"></i> TikTok</span>
-       <span><i class="fa-brands fa-instagram"></i> IG</span>
-       <span><i class="fa-brands fa-facebook"></i> FB</span>
-       <span><i class="fa-brands fa-youtube"></i> YT</span>
-    </div>    
-
-    <input type="text" id="videoUrl" placeholder="Paste link here...">
-
-    <div class="format-selector" id="formatSelector">
-        <div class="format-option active" data-value="mp4" onclick="setFormat('mp4')">
-            <i class="fas fa-video"></i> Video
-        </div>
-        <div class="format-option" data-value="mp3" onclick="setFormat('mp3')">
-            <i class="fas fa-music"></i> Audio (MP3)
-        </div>
+    <div class="input-group">
+        <input type="text" id="videoUrl" placeholder="Paste link here...">
+        <button class="paste-btn" onclick="pasteFromClipboard()"><i class="fas fa-paste"></i></button>
     </div>
-
-    <button id="extractBtn" onclick="extractVideo()">Get media</button>
-
+    
+    <div class="format-selector">
+        <div id="opt-mp4" class="format-option active" onclick="setFormat('mp4')">Video</div>
+        <div id="opt-mp3" class="format-option" onclick="setFormat('mp3')">Audio (MP3)</div>
+    </div>
+    
+    <button id="extractBtn" class="main-btn" onclick="extractVideo()">Get media</button>
+    
     <div class="quick-support">
-        <span class="support-text">Support this free tool:</span>
-        <a href="https://ko-fi.com/withouthistory" target="_blank" title="Support on Ko-fi">
-            <img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" alt="Ko-fi" style="width: 24px; height: 24px;">
-        </a>
-        <a href="https://buymeacoffee.com/withouthistory" target="_blank" title="Buy Me a Coffee">
-            <i class="fas fa-coffee" style="color: #ffdd00;"></i>
-        </a>
-        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank" title="Patreon">
-            <i class="fab fa-patreon" style="color: #ff424d;"></i>
-        </a>
+        <span>Support this free tool:</span>
+        <a href="https://ko-fi.com/withouthistory" target="_blank"><img src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png" width="24"></a>
+        <a href="https://buymeacoffee.com/withouthistory" target="_blank"><i class="fas fa-coffee" style="color:#ffdd00"></i></a>
+        <a href="https://www.patreon.com/c/WithoutHistory" target="_blank"><i class="fab fa-patreon" style="color:#ff424d"></i></a>
     </div>
 
-    <div class="progress-wrapper" id="progressWrapper">
-        <div class="progress-status">
-            <span id="progressText">Connecting to media server...</span>
-            <span id="progressPercent">0%</span>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-    </div>
-
+    <div id="progressWrapper" style="display:none; margin-top: 1.5rem; text-align:center; color:#94a3b8; font-size:0.85rem;">Extracting media...</div>
+    
     <div id="result">
         <div class="video-card">
-            <img id="thumbnail" src="" alt="Thumbnail">
-            <h3 id="videoTitle" style="font-size: 1rem; margin-bottom: 1.2rem; font-weight: 400;"></h3>
-            <a id="downloadLink" href="#" class="download-btn">Download Media</a>
+            <img id="thumbnail" src="">
+            <h3 id="videoTitle" style="font-size:1rem; font-weight:400; color:white; margin:10px 0;"></h3>
+            <p id="fileSizeDisplay" style="font-weight:700; color:#c084fc; margin: 10px 0;"></p>
+            <a id="downloadLink" class="download-btn">Download Media</a>
+            <a id="fallbackLink" style="font-size:0.8rem; color:#64748b; text-decoration:underline; display:block; margin-top:15px;">Direct Link (Use if buffering hangs)</a>
         </div>
     </div>
 </div>
 
-<footer>
-    <div class="follow-label">Follow Us</div>
-    <div class="social-links">
-        <a href="https://www.youtube.com/@withouthistory" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="https://x.com/WithoutHistory" target="_blank" title="Follow on X"> <i class="fa-brands fa-x-twitter"></i> </a>
-    </div>
-    <div class="brand-text">A <b>Without History</b> Production <br><span style="font-size: 0.7rem; opacity: 0.5;">v1.1.3</span></div>
-</footer>
+<footer>v1.1.6</footer>
 
 <script>
-    let simInterval;
     let selectedFormat = 'mp4';
-
+    
+    async function pasteFromClipboard() {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('videoUrl').value = text;
+        } catch(e) { alert("Enable clipboard permissions in your browser."); }
+    }
+    
     function setFormat(val) {
         selectedFormat = val;
-        document.querySelectorAll('.format-option').forEach(opt => {
-            opt.classList.toggle('active', opt.dataset.value === val);
-        });
+        document.getElementById('opt-mp4').classList.toggle('active', val==='mp4');
+        document.getElementById('opt-mp3').classList.toggle('active', val==='mp3');
     }
-
-    function startSimulatedProgress() {
-        const wrapper = document.getElementById('progressWrapper');
-        const bar = document.getElementById('progressBar');
-        const text = document.getElementById('progressText');
-        const pct = document.getElementById('progressPercent');
-        
-        wrapper.style.display = 'block';
-        bar.style.width = '0%';
-        pct.innerText = '0%';
-        text.innerText = 'Extracting media...';
-        
-        let width = 0;
-        simInterval = setInterval(() => {
-            if (width < 90) {
-                let increment = Math.random() * (90 - width) * 0.1; 
-                width += increment > 0.5 ? increment : 0.5;
-                if (width > 90) width = 90;
-                bar.style.width = width + '%';
-                pct.innerText = Math.floor(width) + '%';
-                if (width > 50) text.innerText = 'Processing metadata...';
-                if (width > 80) text.innerText = 'Finalizing file...';
-            }
-        }, 400);
-    }
-
-    function completeProgress() {
-        clearInterval(simInterval);
-        document.getElementById('progressBar').style.width = '100%';
-        document.getElementById('progressPercent').innerText = '100%';
-        document.getElementById('progressText').innerText = 'Ready!';
-    }
-
-    // NEW: Native Share Sheet function
-    async function downloadToCameraRoll(videoUrl, filename) {
-        const btn = document.getElementById('downloadLink');
-        const originalText = btn.innerText;
-        
-        try {
-            // Buffer UI state
-            btn.innerText = "Buffering file (Please wait)...";
-            btn.style.opacity = '0.7';
-            btn.style.pointerEvents = 'none';
-
-            // Download file to browser RAM
-            const response = await fetch(videoUrl);
-            const blob = await response.blob();
-            const file = new File([blob], filename, { type: blob.type });
-
-            btn.innerText = "Opening Share Menu...";
-
-            // Trigger native share if supported (iOS Safari / Android Chrome)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    title: 'WithoutHustle Media'
-                });
-            } else {
-                // Fallback: Standard browser download for PC / unsupported browsers
-                const blobUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(blobUrl);
-            }
-            
-            // Restore UI
-            btn.innerText = originalText;
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-
-        } catch (error) {
-            console.error("Download action closed or failed:", error);
-            // Restore UI silently if user just cancelled the share sheet
-            btn.innerText = originalText;
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-        }
-    }
-
+    
     async function extractVideo() {
-        const urlInput = document.getElementById('videoUrl');
-        const btn = document.getElementById('extractBtn');
-        const wrapper = document.getElementById('progressWrapper');
-        const result = document.getElementById('result');
+        const url = document.getElementById('videoUrl').value;
+        if(!url) return;
         
-        if (!urlInput.value) return;
-
-        btn.disabled = true;
-        result.style.display = 'none';
-        startSimulatedProgress();
-
+        const btn = document.getElementById('extractBtn');
+        btn.disabled = true; btn.innerText = "Extracting...";
+        document.getElementById('progressWrapper').style.display = 'block';
+        document.getElementById('result').style.display = 'none';
+        
         try {
-            const response = await fetch('/api/extract', {
+            const res = await fetch('/api/extract', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    url: urlInput.value,
-                    format: selectedFormat 
-                })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url, format: selectedFormat})
             });
+            const data = await res.json();
+            
+            if(data.success) {
+                document.getElementById('videoTitle').innerText = data.title;
+                document.getElementById('thumbnail').src = data.thumbnail;
+                document.getElementById('fileSizeDisplay').innerText = `File Size: ${data.filesize_mb} MB`;
+                document.getElementById('fallbackLink').href = data.download_url;
+                
+                const dlBtn = document.getElementById('downloadLink');
+                dlBtn.innerText = selectedFormat === 'mp3' ? "Download MP3" : "Download Video";
+                
+                dlBtn.onclick = (e) => {
+                    e.preventDefault();
+                    handleSmartDownload(data.download_url, data.download_url.split('/').pop());
+                };
+                
+                document.getElementById('result').style.display = 'block';
+            } else {
+                alert('Engine Error: ' + (data.detail || 'Unknown error'));
+            }
+        } catch(e) { alert("Extraction failed."); }
+        
+        btn.disabled = false; btn.innerText = "Get media";
+        document.getElementById('progressWrapper').style.display = 'none';
+    }
+    
+    async function handleSmartDownload(url, name) {
+        const btn = document.getElementById('downloadLink');
+        const oldText = btn.innerText;
+        
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-            const data = await response.json();
-            completeProgress();
-
-            setTimeout(() => {
-                wrapper.style.display = 'none';
-                if (data.success) {
-                    document.getElementById('videoTitle').innerText = data.title;
-                    document.getElementById('thumbnail').src = data.thumbnail;
-                    
-                    const dlBtn = document.getElementById('downloadLink');
-                    dlBtn.innerText = selectedFormat === 'mp3' ? 'Download MP3' : 'Download Video';
-                    
-                    // Extract exact filename generated by backend to pass to the share sheet
-                    const finalFilename = data.download_url.split('/').pop();
-
-                    // Apply the new onclick behavior instead of direct href
-                    dlBtn.onclick = function(e) {
-                        e.preventDefault();
-                        downloadToCameraRoll(data.download_url, finalFilename);
-                    };
-                    
-                    result.style.display = 'block';
+        if (isMobile && navigator.canShare) {
+            btn.innerText = "Buffering..."; 
+            btn.style.pointerEvents = 'none';
+            try {
+                const res = await fetch(url);
+                const blob = await res.blob();
+                const file = new File([blob], name, {type: blob.type});
+                if(navigator.canShare({files: [file]})) {
+                    await navigator.share({files: [file]});
                 } else {
-                    alert('Engine Error: ' + (data.detail || 'Unknown error'));
+                    const a = document.createElement('a'); a.href = window.URL.createObjectURL(blob); a.download = name; a.click();
                 }
-                btn.disabled = false;
-            }, 600);
-
-        } catch (err) {
-            clearInterval(simInterval);
-            wrapper.style.display = 'none';
-            alert('Connection Error: ' + err.message);
-            btn.disabled = false;
+            } catch(e) { console.log("Share cancelled or failed"); }
+            btn.innerText = oldText; 
+            btn.style.pointerEvents = 'auto';
+        } else {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     }
 </script>
-
-<script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
-<script type="text/javascript">
-    aclib.runAutoTag({
-        zoneId: 'ygx4ipeqqu',
-    });
-</script>
-
 </body>
 </html>
+EOF
